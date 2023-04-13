@@ -83,9 +83,9 @@ function updateCollections(id, direction) {
 
 for (const elm of allItems) {
   elm.addEventListener("click", function () {
-    const parent = elm.parentNode.id;
+    const parentId = elm.parentNode.id;
     const id = elm.id;
-    const direction = parent === "main" ? "toFavs" : "toMain";
+    const direction = parentId === "main" ? "toFavs" : "toMain";
     updateCollections(id, direction);
   });
 }
