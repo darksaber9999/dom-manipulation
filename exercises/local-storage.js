@@ -38,3 +38,61 @@
  */
 
 // Your code goes here...
+
+const data = {
+  items: [],
+};
+
+const cardsContainer = document.querySelector(".cardsContainer");
+
+function paintCardsRed(favorites) {
+  for (const elm of cardsContainer.children) {
+    if (favorites.includes(Number(elm.id))) {
+      elm.style.backgroundColor = "red";
+    }
+  }
+}
+
+function getFavorites() {
+  const favoritesDataRaw = localStorage.getItem("favorites");
+  const favoritesData = JSON.parse(favoritesDataRaw);
+  return favoritesData;
+}
+
+function setFavorites(favoritesData) {
+  localStorage.setItem("favorites", JSON.stringify(favoritesData));
+}
+
+if (localStorage.getItem("favorites")) {
+  const favoritesData = getFavorites();
+  paintCardsRed(favoritesData.items);
+} else {
+  setFavorites(data);
+}
+
+function addFavorite(cardId) {
+  const favoritesData = getFavorites();
+  favoritesData.items.push(cardId);
+  setFavorites(favoritesData);
+}
+
+function deleteFavorite(cardId) {
+  const favoritesData = getFavorites();
+  favoritesData.items.splice(favoritesData.items.indexOf(cardId), 1);
+  setFavorites(favoritesData);
+}
+
+const callbackFn = (e) => {
+  const item = e.target;
+  if (Array.from(item.classList).includes("card")) {
+    if (item.style.backgroundColor === "red") {
+      item.style.backgroundColor = "white";
+      deleteFavorite(Number(item.id));
+    } else {
+      item.style.backgroundColor = "red";
+      addFavorite(Number(item.id));
+    }
+  }
+};
+
+cardsContainer.addEventListener("click", callbackFn);
